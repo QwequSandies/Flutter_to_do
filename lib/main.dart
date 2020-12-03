@@ -1,5 +1,8 @@
+import 'dart:html';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() => runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -20,14 +23,20 @@ class _MyAppState extends State<MyApp> {
   List todos = List();
   String input = "";
 
-  @override
-  void initState() {
-    super.initState();
-    todos.add('item1');
-    todos.add('item2');
-    todos.add('item3');
-    todos.add('item4');
+  createTodos() {
+    DocumentReference documentReference =
+        Firestore.instance.collection("MyTodos").document(input);
+
+        Map<String, String> todo = {
+          "todoTitle": input
+        };
+
+        documentReference.setData(todos).whenComplete(() {
+          print("$input created");
+        });
   }
+
+ 
 
   @override
   Widget build(BuildContext context) {
